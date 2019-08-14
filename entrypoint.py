@@ -35,6 +35,7 @@ def read_from_postgres_to_df():
     spark = SparkSession.builder.appName('abc').enableHiveSupport().getOrCreate()
     sc = spark.sparkContext
 
+    st_sc = datetime.now()
     dict_lst = [
         {"A": 1, "type_activity_name": "xxx"},
         {"A": 2, "type_activity_name": "yyy"},
@@ -45,10 +46,9 @@ def read_from_postgres_to_df():
     print(type(rdd))
     df = spark.read.json(rdd)
 
-    df.groupBy().agg()
+    # df.groupBy().agg()
     df.createOrReplaceTempView('test')
     step_1 = datetime.now()
-    print('Load data: {0}'.format(step_1-st))
     df.show()
     from pyspark import shell
     sql = """
@@ -59,6 +59,8 @@ def read_from_postgres_to_df():
     df = shell.sql(sql)
     df.show()
     step_2 = datetime.now()
+    print('Load sc: {0}'.format(st_sc-st))
+    print('Load data: {0}'.format(step_1-st_sc))
     print('Spark sql execute: {0}'.format(step_2-step_1))
     result = ''
 
