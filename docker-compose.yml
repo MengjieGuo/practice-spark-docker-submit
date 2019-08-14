@@ -1,0 +1,160 @@
+# depends on 决定服务之间的启动顺序
+version: '2.1'
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:latest
+    hostname: rabbitmqhost
+    restart: always
+    container_name: lg_rabbitmq
+    volumes:
+      - "./localtime:/etc/localtime"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    logging:
+      options:
+        max-size: "50m"
+
+#  postgres:
+#    image: postgres:9.6
+#    hostname: postgreshost
+#    restart: always
+#    container_name: lg_postgres
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - "./localtime:/etc/localtime"
+#      - /tmp/lighway_db_23:/var/lib/postgresql/data
+##      - ./postgresql.conf:/var/lib/postgresql/data/lightway/postgresql.conf
+##      - /Users/screwman/Docker/lightway-autofetch-v0.2/lightway_config/postgresql.conf:/etc/postgresql/postgresql.conf
+##    command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+##    command:  -c 'shared_buffers=256MB' -c 'max_connections=200'
+#    environment:
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+#      - POSTGRES_DB=postgres
+#      - PGDATA=/var/lib/postgresql/data/postgres
+#    logging:
+#      options:
+#        max-size: "50m"
+
+  redis:
+    image: redis:latest
+    hostname: redishost
+    restart: always
+    container_name: lg_redis
+    volumes:
+      - "./localtime:/etc/localtime"
+      - /tmp/redis_23:/data
+    ports:
+      - "6379:6379"
+    logging:
+      options:
+        max-size: "50m"
+#
+#  nginx:
+#    image: nginx:latest
+#    ports:
+#      - "8002:8000"
+#    restart: always
+#    container_name: lg_nginx
+#    volumes:
+#      - "./localtime:/etc/localtime"
+#      - ./static/:/static/:ro
+#      - ./lightGateway/deploy/nginx/lightGateway-local.conf:/etc/nginx/conf.d/my.conf
+#    logging:
+#      options:
+#        max-size: "50m"
+
+
+#  web:
+##    build: .
+##    network_mode: host
+##    command: circusd /code/lightGateway/deploy/circusd.ini
+#    image: registry.cn-hangzhou.aliyuncs.com/mengjieguo/lightweb:19.05.12_Alpha
+#    command: python3 manage.py runserver 0.0.0.0:8000
+#    hostname: weblocal
+#    restart: always
+#    container_name: lg_web
+#    volumes:
+#      - .:/code
+#      - /Users/screwman/home/newlight/request/:/home/newlight/request/
+#      - /Users/screwman/home/newlight/response/:/home/newlight/response/
+#    ports:
+#      - "8000:8000"
+#    links:
+#      - rabbitmq:rabbitmqhost
+#      - redis:redishost
+#      - postgres:postgreshost
+#    environment:
+#      - LANG=C.UTF-8
+#    depends_on:
+#      - rabbitmq
+#      - redis
+#      - postgres
+
+#  worker:
+#    image : registry.cn-hangzhou.aliyuncs.com/mengjieguo/lightweb:19.05.12_Alpha
+##    command: circusd lightGateway/deploy/celery-circusd.ini
+#    command: /bin/bash run_worker_beat.sh
+#    restart: always
+#    container_name: lg_worker
+#    volumes:
+#      - "./localtime:/etc/localtime"
+#      - .:/code
+#    links:
+#      - rabbitmq:rabbitmqhost
+#      - redis:redishost
+##      - postgres:postgreshost
+#    environment:
+#      - LANG=C.UTF-8
+#    depends_on:
+#      - rabbitmq
+#      - redis
+##      - postgres
+#    # Docker container logs taking all my disk space. So, give it a limit
+#    logging:
+##        driver: "json-file"
+#        options:
+#           # max-file: "5"
+#            max-size: "20m"
+
+  #  worker2:
+#    image: registry.cn-hangzhou.aliyuncs.com/mengjieguo/lightweb:19.05.12_Alpha
+#    command: supervisorctl restart celeryd
+#    restart: always
+#    container_name: lg_worker
+#    volumes:
+#      - .:/code
+#      - /Users/screwman/home/newlight/request/:/home/newlight/request/
+#      - /Users/screwman/home/newlight/response/:/home/newlight/response/
+#    links:
+#      - rabbitmq:rabbitmqhost
+#      - redis:redishost
+#      - postgres:postgreshost
+#    environment:
+#      - LANG=C.UTF-8
+#    depends_on:
+#      - rabbitmq
+#      - redis
+#      - postgres
+
+  flower:
+    image: mher/flower
+    restart: on-failure
+    container_name: lg_flower
+    #https://hub.docker.com/r/mher/flower
+#    command: ["flower", "--broker=redis://192.168.199.177:6379/0", "--port=8888"]
+    command: ["flower", "--broker=amqp://guest:guest@192.168.199.177:5672//", "--address=0.0.0.0", "--port=8888"]
+    volumes:
+      - "./localtime:/etc/localtime"
+    ports:
+       - "8888:8888"
+    logging:
+      options:
+        max-size: "20m"
