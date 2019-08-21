@@ -2,7 +2,7 @@
 
 # 在一个容器中运行多条命令时，需要在命令后面加上 "&" 表示放在后台运行，然后可以继续执行下一条命令
 
-#celery -A lightGateway beat -f /code/worker.log &
+celery -A DjangoTaskForSpark beat &
 #celery worker -A lightGateway --loglevel=info -c 8 -f /code/worker.log &
 
 #celery -A DjangoTaskForSpark beat --scheduler django_celery_beat.schedulers:DatabaseScheduler  &

@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url
 
+from taskmanager.view import SparkTaskProcessor
+
 urlpatterns = [
-    # url(r'^url1/', '', name=''),
+    url(r'^SubmitTask/$', SparkTaskProcessor.as_view(), name='Accept Spark task'),
 ]
