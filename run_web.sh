@@ -8,4 +8,4 @@
 #copy_env = True
 #send_hup = True
 
-gunicorn --workers=8 --threads=8 --bind 0.0.0.0:8000 --max-requests 2000 --timeout 30 --access-logfile web_access.log DjangoTaskForSpark.wsgi
+gunicorn --bind 0.0.0.0:8000 --max-requests 2000 --timeout 30 --access-logfile web_access.log DjangoTaskForSpark.wsgi

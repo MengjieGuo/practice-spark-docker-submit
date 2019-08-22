@@ -29,6 +29,7 @@ class SparkTaskProcessor(View):
 
             # Second Keep file to local dir
             file_path = 'spark_tasks/{0}'.format(spark_sql.name)
+            print('Get file path in web: {0}'.format(file_path))
             with open(file_path, 'wb+') as destination:
                 for chunk in spark_sql.chunks():
                     destination.write(chunk)

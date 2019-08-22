@@ -45,11 +45,13 @@ def spark_submit_processor(file_path):
 
     :return:
     """
+    print('Get file path in worker: {0}'.format(file_path))
+
     # python 调用shell命令 完成spark-submit文件提交
     import subprocess
     command = 'su - TestUser001 -c  "/opt/hadoopclient/Spark2x/spark/bin/spark-submit' \
-              ' /home/var/project/SparkProjectTest/{spark_task_file}"' \
+              ' /home/var/project/DjangoSubmitSparkTask/submit_spark_task_running/{spark_task_file}"' \
         .format(spark_task_file=file_path)
     print(command)
-    # result = subprocess.call(command, shell=True)
-    # print(result)
+    result = subprocess.call(command, shell=True)
+    print(result)

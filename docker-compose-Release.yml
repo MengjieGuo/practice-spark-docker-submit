@@ -1,0 +1,55 @@
+# depends on 决定服务之间的启动顺序
+version: '2.1'
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: rabbitmqhost
+    restart: always
+    container_name: lg_rabbitmq
+    volumes:
+      - "/etc/localtime:/etc/localtime"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5674:5672"
+      - "15674:15672"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+    mem_limit: 1000000000
+
+  redis:
+    image: redis:latest
+    hostname: redishost
+    restart: always
+    container_name: lg_redis
+    volumes:
+      - "/etc/localtime:/etc/localtime"
+      - "/home/docker_storage/django_submit_spark_task/redis/:/data"
+    ports:
+      - "6384:6379"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+    mem_limit: 1000000000
+#
+#  flower:
+#    image: mher/flower
+#    restart: on-failure
+#    container_name: lg_flower
+#    #https://hub.docker.com/r/mher/flower
+##    command: ["flower", "--broker=redis://192.168.199.177:6379/0", "--port=8888"]
+#    command: ["flower", "--broker=amqp://guest:guest@rabbitmq:5672//", "--address=0.0.0.0", "--port=8888"]
+#    volumes:
+#      - "./localtime:/etc/localtime"
+#    ports:
+#       - "8888:8888"
+#    logging:
+#      options:
+#        max-size: "20m"
+#    mem_limit: 1000000000

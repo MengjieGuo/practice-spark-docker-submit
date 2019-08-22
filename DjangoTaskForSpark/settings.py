@@ -134,7 +134,7 @@ if CELERY_RABBIT_HOSTNAME.startswith('tcp://'):
 CELERY_BROKER_URL = 'amqp://{user}:{password}@{hostname}/{vhost}/'.format(
     user=os.environ.get('RABBIT_ENV_USER', 'guest'),
     password=os.environ.get('RABBIT_ENV_RABBITMQ_PASS', 'guest'),
-    hostname='192.168.1.175',
+    hostname='10.57.98.251:5674',
     vhost=os.environ.get('RABBIT_ENV_VHOST', ''))
 
 # 设置消息中间人 - Redis
@@ -143,7 +143,7 @@ CELERY_BROKER_URL = 'amqp://{user}:{password}@{hostname}/{vhost}/'.format(
 # 存储任务运行结果的数据库，一般不使用RabbitMQ，可以使用redis或者Django的数据库
 # CELERY_RESULT_BACKEND = 'django-db'
 # CELERY_RESULT_BACKEND = 'redis://username:password@redis:6379/0'
-CELERY_RESULT_BACKEND = 'redis://192.168.1.175:6379/0'
+CELERY_RESULT_BACKEND = 'redis://10.57.98.251:6384/0'
 # 由于使用redis作为任务的运行结果存储，所以设置结果的过期时间，过期自动清除
 CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours.
 
