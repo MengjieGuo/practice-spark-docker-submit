@@ -14,6 +14,32 @@
 
 - 通过http端口提交spark任务文件
 
+可以参考以下代码
+
+> python send_file.py my_spark_task.py -- 运行代码, 其中 my_spark_task.py 为 spark 任务文件
+>
+> cat send_file.py -- 查看代码
+  
+```python
+
+#!/usr/bin/env python 
+# -*- coding: utf-8 -*-
+import sys
+
+import requests
+
+file_name = sys.argv[1]
+
+url = 'http://127.0.0.1:8000/FusionInsight/SubmitTask/'
+files = {'file': open('./{0}'.format(file_name), 'rb')}
+data = {'k1': 1, 'k2': 2} # 其他参数，可以忽略
+
+response = requests.post(url, files=files, data=data)
+print(response)
+
+
+```
+
 # spark任务文件内容
 
 - 设置全局默认编码为utf-8

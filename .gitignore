@@ -85,7 +85,7 @@ _build
 .vscode
 .idea*
 *.env
-
+.idea/*
 #production_setting.py
 pip_packages*
 production_setting.*.Release.py
