@@ -3,7 +3,7 @@ billiard==3.6.1.0
 celery==4.3.0
 configparser==3.8.1
 contextlib2==0.5.5
-Django==1.11.23
+Django==1.11.29
 django-celery-beat==1.5.0
 django-celery-results==1.1.2
 django-timezone-field==3.0
